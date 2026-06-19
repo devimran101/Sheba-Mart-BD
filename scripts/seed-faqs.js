@@ -34,32 +34,32 @@ const FAQ = mongoose.models.FAQ || mongoose.model('FAQ', FAQSchema);
 
 const faqs = [
   {
-    question: 'What is your return policy for baby care products and appliances?',
-    answer: 'We offer a 7-day easy return policy for all unused products in their original packaging. For home appliances, we also provide official brand warranty claims. Please note that for hygiene reasons, personal baby care items like feeding nipples or breast pumps cannot be returned once opened.',
+    question: 'What sizes do you offer for your garments and how do I choose the correct fit?',
+    answer: 'We offer sizes ranging from S to XXL for adults, and standard age-based sizing for kids. Every clothing product page has a detailed Size Chart containing exact chest, length, sleeve, and shoulder measurements in inches to help you select your perfect fit.',
     order: 1,
     isActive: true,
   },
   {
-    question: 'Are the baby products you sell safe and certified?',
-    answer: 'Yes, absolutely. All our baby products, feeding gear, and skincare items are sourced directly from certified manufacturers and are 100% BPA-free, non-toxic, and dermatologically tested for sensitive infant skin.',
+    question: 'What are the washing and care instructions for premium silk and cashmere items?',
+    answer: 'To preserve the longevity of luxury items like our Floral Silk Wrap Dresses and Cashmere Cardigans, we highly recommend dry cleaning or gentle hand washing with cold water and mild liquid detergent. Always lay flat to dry in the shade and avoid wringing or machine drying.',
     order: 2,
     isActive: true,
   },
   {
-    question: 'Do you provide home delivery all over Bangladesh?',
-    answer: 'Yes, we deliver nationwide. Inside Dhaka, delivery takes 24 to 48 hours, and outside Dhaka, it takes 3 to 5 business days. We offer both Cash on Delivery (COD) and secure online payment options.',
+    question: 'Do you offer Cash on Delivery (COD) and what are the delivery times?',
+    answer: 'Yes, we provide Cash on Delivery (COD) nationwide across Bangladesh. Delivery inside Dhaka typically takes 24 to 48 hours, while delivery outside Dhaka is completed via express courier services within 3 to 5 business days.',
     order: 3,
     isActive: true,
   },
   {
-    question: 'How do I claim the warranty for home appliances purchased from Sheba Mart BD?',
-    answer: 'All smart home appliances come with their official brand warranty cards inside the box. You can claim the warranty directly at any authorized brand service center, or you can contact our support team and we will assist you with the process.',
+    question: 'What is your exchange and return policy for clothing items?',
+    answer: 'We offer an easy 7-day exchange policy. If your garment has a size issue or physical defect, you can request an exchange through your customer dashboard or support team. Please ensure the clothing remains unworn, unwashed, and has all original tags and packaging intact.',
     order: 4,
     isActive: true,
   },
   {
-    question: 'Can I track my order once it is shipped?',
-    answer: 'Yes, once your order is dispatched, you will receive an SMS containing a tracking link and courier details. You can also monitor your order status directly from the "My Orders" section of your dashboard.',
+    question: 'Do you offer custom tailoring or custom fittings for blazers and trousers?',
+    answer: 'Currently, all our products (such as our linen blazers and pleated trousers) are sold as ready-to-wear garments in standard sizing. We do not offer bespoke tailoring, custom measurements, or alteration services at this time.',
     order: 5,
     isActive: true,
   }

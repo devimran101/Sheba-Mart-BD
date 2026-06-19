@@ -91,7 +91,14 @@ export default function NavbarV2() {
   useEffect(() => {
     if (status === 'authenticated') {
       fetch('/api/user/profile')
-        .then(res => res.json())
+        .then(res => {
+          if (res.status === 401 || res.status === 404) {
+            signOut({ redirect: false });
+            throw new Error('Session stale or invalid user');
+          }
+          if (!res.ok) throw new Error('Failed to fetch profile');
+          return res.json();
+        })
         .then(data => setProfile(data))
         .catch(err => console.error('Failed to fetch profile', err));
     }
@@ -162,8 +169,8 @@ export default function NavbarV2() {
             />
 
             <Link href="/" className={`text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-2 group ${!isHomePage || isScrolled ? 'text-foreground' : 'text-white'}`}>
-              <Image src="/logo.webp" width={40} height={40} alt="Care Mom Logo" className="object-contain" />
-              {settings?.brandName || 'Care Mom'}
+              <Image src="/logo.webp" width={40} height={40} alt="Sheba Mart Bd Logo" className="object-contain" />
+              {settings?.brandName || 'Sheba Mart Bd'}
             </Link>
           </div>
 
@@ -199,8 +206,8 @@ export default function NavbarV2() {
                     <Link
                       href={item.href}
                       className={`text-xs font-bold uppercase tracking-widest relative group transition-colors ${(!isHomePage || isScrolled)
-                          ? (pathname === item.href ? 'text-foreground' : 'text-foreground/70 hover:text-primary')
-                          : (pathname === item.href ? 'text-white' : 'text-white/80 hover:text-white')
+                        ? (pathname === item.href ? 'text-foreground' : 'text-foreground/70 hover:text-primary')
+                        : (pathname === item.href ? 'text-white' : 'text-white/80 hover:text-white')
                         }`}
                     >
                       {item.label}

@@ -189,8 +189,8 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       metadataBase: new URL(baseUrl),
       title: {
-        default: settings.metaTitle || settings.brandName || "Care Mom",
-        template: `%s | ${settings.brandName || "Care Mom"}`,
+        default: settings.metaTitle || settings.brandName || "Sheba Mart Bd",
+        template: `%s | ${settings.brandName || "Sheba Mart Bd"}`,
       },
       description: settings.metaDescription || settings.brandName || "Your ultimate destination for quality products.",
       manifest: '/manifest.json',
@@ -202,21 +202,21 @@ export async function generateMetadata(): Promise<Metadata> {
       appleWebApp: {
         capable: true,
         statusBarStyle: 'default',
-        title: settings.brandName || "Care Mom",
+        title: settings.brandName || "Sheba Mart Bd",
       },
       formatDetection: {
         telephone: false,
       },
       openGraph: {
-        title: settings.metaTitle || settings.brandName || "Care Mom",
+        title: settings.metaTitle || settings.brandName || "Sheba Mart Bd",
         description: settings.metaDescription || settings.brandName || "Your ultimate destination for quality products.",
         url: baseUrl,
-        siteName: settings.brandName || "Care Mom",
+        siteName: settings.brandName || "Sheba Mart Bd",
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
-        title: settings.metaTitle || settings.brandName || "Care Mom",
+        title: settings.metaTitle || settings.brandName || "Sheba Mart Bd",
         description: settings.metaDescription || settings.brandName || "Your ultimate destination for quality products.",
       },
       verification: {
@@ -233,7 +233,7 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: "Care Mom",
+      title: "Sheba Mart Bd",
       description: "Your ultimate destination for quality products.",
     };
   }

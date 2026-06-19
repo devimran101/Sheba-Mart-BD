@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         country: 'Bangladesh',
         isDefault: true
       }],
-      role: 'user',
+      role: normalizedEmail === 'imranshuvo101@gmail.com' ? 'super_admin' : 'user',
     });
 
     return NextResponse.json(

@@ -13,10 +13,18 @@ export async function GET(req: NextRequest) {
     }
 
     await connectToDatabase();
-    const user = await User.findOne({ _id: session.user.id }).select('-password').lean();
+    
+    const user = (await User.findOne({ _id: session.user.id }).select('-password').lean()) as any;
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    // If the logged in user is the super_admin email, ensure they have the role in DB
+    const sessionUserEmail = session.user.email;
+    if (sessionUserEmail === 'imranshuvo101@gmail.com' && user.role !== 'super_admin') {
+      await User.updateOne({ _id: session.user.id }, { $set: { role: 'super_admin' } });
+      user.role = 'super_admin';
     }
 
     return NextResponse.json(user, { status: 200 });

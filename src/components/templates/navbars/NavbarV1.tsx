@@ -97,6 +97,10 @@ export default function Navbar() {
     if (status === 'authenticated') {
       fetch('/api/user/profile', { signal: controller.signal })
         .then(res => {
+          if (res.status === 401 || res.status === 404) {
+            signOut({ redirect: false });
+            throw new Error('Session stale or invalid user');
+          }
           if (!res.ok) throw new Error('Failed to fetch profile');
           return res.json();
         })

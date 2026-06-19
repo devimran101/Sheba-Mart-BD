@@ -12,7 +12,7 @@ export async function generateOrganizationSchema(settings: any) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: settings.brandName || 'Care Mom',
+    name: settings.brandName || 'Sheba Mart Bd',
     url: baseUrl,
     logo: settings.logo,
     contactPoint: {
@@ -31,7 +31,7 @@ export async function generateOrganizationSchema(settings: any) {
 export async function generateProductSchema(product: any) {
   const price = product.salePrice ?? product.price;
   const baseUrl = await getBaseUrl();
-  
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -41,7 +41,7 @@ export async function generateProductSchema(product: any) {
     sku: product.sku,
     brand: {
       '@type': 'Brand',
-      name: 'Care Mom',
+      name: 'Sheba Mart Bd',
     },
     offers: {
       '@type': 'Offer',
@@ -78,7 +78,7 @@ export async function generateBlogSchema(blog: any) {
     dateModified: blog.updatedAt || blog.createdAt,
     author: {
       '@type': 'Organization',
-      name: 'Care Mom',
+      name: 'Sheba Mart Bd',
     },
     description: blog.metaDescription || blog.title,
     url: `${baseUrl}/blog/${blog.slug}`,

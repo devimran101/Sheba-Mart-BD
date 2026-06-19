@@ -36,33 +36,33 @@ const Category = mongoose.models.Category || mongoose.model('Category', Category
 
 const categories = [
   {
-    name: 'Motherhood & Maternity',
-    slug: 'motherhood-maternity',
-    image: '/assets/images/cagetory/Motherhood & Maternity.webp',
+    name: "Ladies' Clothing",
+    slug: 'ladies-clothing',
+    image: '/assets/images/cagetory/womens-clothing.webp',
     isActive: true,
   },
   {
-    name: 'Baby Care & Essentials',
-    slug: 'baby-care-essentials',
-    image: '/assets/images/cagetory/Baby Care & Essentials.webp',
+    name: "Men's Clothing",
+    slug: 'mens-clothing',
+    image: '/assets/images/cagetory/mens-clothing.webp',
     isActive: true,
   },
   {
-    name: 'Baby Feeding & Nutrition',
-    slug: 'baby-feeding-nutrition',
-    image: '/assets/images/cagetory/Baby Feeding & Nutrition.webp',
+    name: "Kids & Baby Clothing",
+    slug: 'kids-baby-clothing',
+    image: '/assets/images/cagetory/kids-baby.webp',
     isActive: true,
   },
   {
-    name: 'Smart Kitchen Appliances',
-    slug: 'kitchen-appliances',
-    image: '/assets/images/cagetory/Smart Kitchen Appliances.webp',
+    name: 'Fashion Accessories',
+    slug: 'fashion-accessories',
+    image: '/assets/images/cagetory/fashion-accessories.webp',
     isActive: true,
   },
   {
-    name: 'Home Comfort & Cleaning',
-    slug: 'home-comfort-cleaning',
-    image: '/assets/images/cagetory/Home Comfort & Cleaning.webp',
+    name: 'Jewelry & Ornaments',
+    slug: 'jewelry',
+    image: '/assets/images/cagetory/jewelry.webp',
     isActive: true,
   }
 ];

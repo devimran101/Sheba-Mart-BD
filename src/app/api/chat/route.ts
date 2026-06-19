@@ -10,9 +10,9 @@ export async function POST(req: NextRequest) {
     // Fetch global AI configuration
     const settings = await getCachedSettings();
     const aiConfig = settings?.aiConfig || {};
-    
+
     const apiKey = aiConfig.openRouterApiKey || process.env.OPENROUTER_API_KEY;
-    const systemPrompt = aiConfig.systemPrompt || 'You are a helpful e-commerce assistant for Care Mom.';
+    const systemPrompt = aiConfig.systemPrompt || 'You are a helpful e-commerce assistant for Sheba Mart Bd.';
 
     if (!apiKey) {
       console.error('OPENROUTER_API_KEY is missing');
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       apiKey: apiKey,
       defaultHeaders: {
         'HTTP-Referer': process.env.NEXTAUTH_URL || 'http://localhost:3000',
-        'X-Title': `${settings?.brandName || 'Care Mom'} - AI Assistant`,
+        'X-Title': `${settings?.brandName || 'Sheba Mart Bd'} - AI Assistant`,
       },
     });
 

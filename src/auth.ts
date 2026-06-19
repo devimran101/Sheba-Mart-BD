@@ -98,6 +98,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 name: user.name || 'Unknown',
                 image: user.image || '',
                 googleId: account.providerAccountId,
+                ...(user.email === 'imranshuvo101@gmail.com' ? { role: 'super_admin' } : {})
               },
               $setOnInsert: {
                 role: 'user',

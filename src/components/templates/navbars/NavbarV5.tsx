@@ -44,7 +44,14 @@ export default function NavbarV5() {
   useEffect(() => {
     if (session) {
       fetch('/api/user/profile')
-        .then(res => res.json())
+        .then(res => {
+          if (res.status === 401 || res.status === 404) {
+            signOut({ redirect: false });
+            throw new Error('Session stale or invalid user');
+          }
+          if (!res.ok) throw new Error('Failed to fetch profile');
+          return res.json();
+        })
         .then(data => setProfile(data))
         .catch(err => console.error('Failed to fetch profile', err));
     } else {

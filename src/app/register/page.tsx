@@ -380,7 +380,7 @@ export default function RegisterPage() {
                             />
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                   <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
@@ -419,7 +419,7 @@ export default function RegisterPage() {
                             />
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                   <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
