@@ -109,12 +109,42 @@ export default function FooterV2() {
 
           {/* Brand Essence */}
           <div className="lg:col-span-4 space-y-6 flex flex-col items-center lg:items-start">
-            <Link href="/" className="text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-2 group text-foreground">
-              <Image src="/logo.webp" width={40} height={40} alt="Sheba Mart Bd Logo" className="object-contain" />
-              {settings?.brandName || 'Sheba Mart Bd'}
+            <Link href="/" className="hover:scale-105 transition-all flex items-center gap-1 group">
+              <div className="relative w-12 h-12 md:w-14 md:h-14 shrink-0">
+                <Image src="/logo.webp" fill alt="Sheba Mart Bd Logo" className="object-contain" />
+              </div>
+              {(() => {
+                const brand = settings?.brandName || 'Sheba Mart Bd';
+                const normalized = brand.replace(/\s/g, '').toLowerCase();
+                if (normalized === 'shebamartbd') {
+                  return (
+                    <div className="flex flex-col md:items-center items-start justify-center relative md:pb-1.5 px-1">
+                      <div className="text-xl md:text-2xl font-black tracking-tight leading-none text-foreground">
+                        <span className="text-primary">S</span>
+                        <span>heba</span>
+                        <span className="text-primary">M</span>
+                        <span>artb</span>
+                        <span className="text-primary">d</span>
+                      </div>
+                      <div
+                        className="hidden md:block text-[7px] md:text-[9px] mt-1 font-medium font-sans leading-none uppercase text-center w-full text-foreground/75"
+                        style={{ letterSpacing: '0.18em' }}
+                      >
+                        Best Quality shopping
+                      </div>
+                      <div className="hidden md:block absolute bottom-0 left-0 right-0 h-[2px] bg-primary" />
+                    </div>
+                  );
+                }
+                return (
+                  <span className="text-2xl md:text-3xl font-black tracking-tighter text-foreground">
+                    {brand}
+                  </span>
+                );
+              })()}
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm leading-relaxed font-medium">
-              Pushing the boundaries of design. Born in the heart of Dhaka, engineering for the world.
+              Your trusted destination for premium quality shopping. Bringing the best products right to your doorstep with trust and excellence.
             </p>
 
             {/* PWA Download App Button */}
