@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-    ArrowLeft, 
-    Save, 
-    Loader2, 
-    Newspaper,
-    Type,
-    FileSearch,
-    ImageIcon,
-    Upload
+import {
+  ArrowLeft,
+  Save,
+  Loader2,
+  Newspaper,
+  Type,
+  FileSearch,
+  ImageIcon,
+  Upload
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,14 +57,14 @@ export default function CreateBlogPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     let processedValue = value;
     // Character limits checking with auto-truncation
     if (name === 'slug' || name === 'metaTitle' || name === 'title') {
-        if (value.length > 100) processedValue = value.slice(0, 100);
+      if (value.length > 100) processedValue = value.slice(0, 100);
     }
     if (name === 'metaDescription') {
-        if (value.length > 200) processedValue = value.slice(0, 200);
+      if (value.length > 200) processedValue = value.slice(0, 200);
     }
 
     if (name === 'thumbnail') {
@@ -78,13 +78,13 @@ export default function CreateBlogPage() {
       }
 
       const newData = { ...prev, [name]: finalValue };
-      
+
       // Auto-generate slug and meta title if the title is being changed
       if (name === 'title') {
         newData.slug = slugify(processedValue);
         newData.metaTitle = processedValue;
       }
-      
+
       return newData;
     });
   };
@@ -96,8 +96,8 @@ export default function CreateBlogPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!hasMeaningfulContent(formData.content)) {
-      toast.error(formData.isPublished 
-        ? 'Please write blog content before publishing.' 
+      toast.error(formData.isPublished
+        ? 'Please write blog content before publishing.'
         : 'Please write blog content before saving your draft.'
       );
       return;
@@ -145,7 +145,7 @@ export default function CreateBlogPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-bold flex items-center gap-2">
-                  <Type className="h-4 w-4" /> Content
+                <Type className="h-4 w-4" /> Content
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -163,7 +163,7 @@ export default function CreateBlogPage() {
               <div className="space-y-2">
                 <label className="text-sm font-bold">Slug / URL path *</label>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">alternativehsbd.com/blog/</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">sebamartbd.com/blog/</span>
                   <Input
                     name="slug"
                     value={formData.slug}
@@ -175,15 +175,15 @@ export default function CreateBlogPage() {
                 </div>
                 <div className="flex justify-end">
                   <span className={`text-[10px] ${formData.slug.length > 90 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                      {formData.slug.length}/100
+                    {formData.slug.length}/100
                   </span>
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold">Content *</label>
-                 <NovelEditor 
+                <NovelEditor
                   onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-                 />
+                />
               </div>
             </CardContent>
           </Card>
@@ -191,13 +191,13 @@ export default function CreateBlogPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-bold flex items-center gap-2">
-                  <ImageIcon className="h-4 w-4" /> Media
+                <ImageIcon className="h-4 w-4" /> Media
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-bold">Thumbnail Image</label>
-                <ImageUpload 
+                <ImageUpload
                   value={formData.thumbnail}
                   onUpload={(url) => {
                     setFormData(prev => ({ ...prev, thumbnail: url }));
@@ -211,7 +211,7 @@ export default function CreateBlogPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-bold flex items-center gap-2 text-primary">
-                  <FileSearch className="h-4 w-4" /> SEO Settings
+                <FileSearch className="h-4 w-4" /> SEO Settings
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -226,7 +226,7 @@ export default function CreateBlogPage() {
                 />
                 <div className="flex justify-end">
                   <span className={`text-[10px] ${formData.metaTitle.length > 90 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                      {formData.metaTitle.length}/100
+                    {formData.metaTitle.length}/100
                   </span>
                 </div>
               </div>
@@ -242,7 +242,7 @@ export default function CreateBlogPage() {
                 />
                 <div className="flex justify-end">
                   <span className={`text-[10px] ${formData.metaDescription.length > 180 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                      {formData.metaDescription.length}/200
+                    {formData.metaDescription.length}/200
                   </span>
                 </div>
               </div>

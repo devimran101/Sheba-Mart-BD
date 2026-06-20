@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { 
-    ArrowLeft, 
-    Save, 
-    Loader2, 
-    Newspaper,
-    Type,
-    FileSearch,
-    ImageIcon,
-    Upload
+import {
+  ArrowLeft,
+  Save,
+  Loader2,
+  Newspaper,
+  Type,
+  FileSearch,
+  ImageIcon,
+  Upload
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,7 +59,7 @@ export default function EditBlogPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -99,10 +99,10 @@ export default function EditBlogPage() {
     let processedValue = value;
     // Character limits checking with auto-truncation
     if (name === 'slug' || name === 'metaTitle' || name === 'title') {
-        if (value.length > 100) processedValue = value.slice(0, 100);
+      if (value.length > 100) processedValue = value.slice(0, 100);
     }
     if (name === 'metaDescription') {
-        if (value.length > 200) processedValue = value.slice(0, 200);
+      if (value.length > 200) processedValue = value.slice(0, 200);
     }
 
     if (name === 'thumbnail') {
@@ -111,14 +111,14 @@ export default function EditBlogPage() {
 
     setFormData(prev => {
       const newData = { ...prev, [name]: processedValue };
-      
+
       // Auto-generate slug and meta title IF it was empty or matching before
       // Note: we usually don't auto-update on edit if the user has already customized it
       if (name === 'title' && !prev.slug) {
         newData.slug = slugify(processedValue);
         newData.metaTitle = processedValue;
       }
-      
+
       return newData;
     });
   };
@@ -154,11 +154,11 @@ export default function EditBlogPage() {
   };
 
   if (loading) {
-      return (
-          <div className="flex h-[60vh] items-center justify-center">
-              <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          </div>
-      );
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (
@@ -180,7 +180,7 @@ export default function EditBlogPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-bold flex items-center gap-2">
-                  <Type className="h-4 w-4" /> Content
+                <Type className="h-4 w-4" /> Content
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -198,7 +198,7 @@ export default function EditBlogPage() {
               <div className="space-y-2">
                 <label className="text-sm font-bold">Slug / URL path *</label>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">alternativehsbd.com/blog/</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">sebamartbd.com/blog/</span>
                   <Input
                     name="slug"
                     value={formData.slug}
@@ -210,7 +210,7 @@ export default function EditBlogPage() {
                 </div>
                 <div className="flex justify-end">
                   <span className={`text-[10px] ${formData.slug.length > 90 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                      {formData.slug.length}/100
+                    {formData.slug.length}/100
                   </span>
                 </div>
               </div>
@@ -227,13 +227,13 @@ export default function EditBlogPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-bold flex items-center gap-2">
-                  <ImageIcon className="h-4 w-4" /> Media
+                <ImageIcon className="h-4 w-4" /> Media
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-bold">Thumbnail Image</label>
-                <ImageUpload 
+                <ImageUpload
                   value={formData.thumbnail}
                   onUpload={(url) => {
                     setFormData(prev => ({ ...prev, thumbnail: url }));
@@ -247,7 +247,7 @@ export default function EditBlogPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-bold flex items-center gap-2 text-primary">
-                  <FileSearch className="h-4 w-4" /> SEO Settings
+                <FileSearch className="h-4 w-4" /> SEO Settings
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -262,7 +262,7 @@ export default function EditBlogPage() {
                 />
                 <div className="flex justify-end">
                   <span className={`text-[10px] ${formData.metaTitle.length > 90 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                      {formData.metaTitle.length}/100
+                    {formData.metaTitle.length}/100
                   </span>
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function EditBlogPage() {
                 />
                 <div className="flex justify-end">
                   <span className={`text-[10px] ${formData.metaDescription.length > 180 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                      {formData.metaDescription.length}/200
+                    {formData.metaDescription.length}/200
                   </span>
                 </div>
               </div>
