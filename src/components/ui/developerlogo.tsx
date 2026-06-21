@@ -11,7 +11,7 @@ const DeveloperLogo = ({ className = "" }: DeveloperLogoProps) => {
       href="https://www.jiapixel.com" 
       target="_blank" 
       rel="noopener noreferrer"
-      className={`flex items-center gap-1.5 group transition-all duration-300 hover:opacity-80 ${className}`}
+      className={`sr-only flex items-center gap-1.5 group transition-all duration-300 hover:opacity-80 ${className}`}
     >
       <span className="text-[10px] text-neutral-600 dark:text-neutral-300 font-medium uppercase tracking-wider">
         Developed by
