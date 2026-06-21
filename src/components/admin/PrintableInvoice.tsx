@@ -15,7 +15,26 @@ const PrintableInvoice: React.FC<InvoiceProps> = ({ order }) => {
       {/* Header */}
       <div className="flex justify-between items-start border-b pb-8 mb-8">
         <div>
-          <h1 className="text-4xl font-black tracking-tighter text-primary mb-2">Sheba Mart <span className="text-orange-500">BD</span></h1>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="relative w-12 h-12 shrink-0">
+              <img src="/logo.webp" alt="Sheba Mart Bd Logo" className="object-contain w-full h-full" />
+            </div>
+            <div className="flex flex-col justify-center px-1">
+              <div className="text-2xl font-black tracking-tight leading-none text-foreground">
+                <span className="text-primary">S</span>
+                <span>heba</span>
+                <span className="text-primary">M</span>
+                <span>artb</span>
+                <span className="text-primary">d</span>
+              </div>
+              <div 
+                className="text-[8px] mt-1 font-medium font-sans leading-none uppercase text-foreground/75"
+                style={{ letterSpacing: '0.18em' }}
+              >
+                Best Quality shopping
+              </div>
+            </div>
+          </div>
           <div className="text-sm text-gray-500 space-y-1">
             <p>House: 12, Road: 05, Sector: 10</p>
             <p>Uttara, Dhaka-1230, Bangladesh</p>
@@ -71,9 +90,9 @@ const PrintableInvoice: React.FC<InvoiceProps> = ({ order }) => {
                 {item.color && <span className="text-xs text-gray-500 mr-2">Color: {item.color}</span>}
                 {item.size && <span className="text-xs text-gray-500">Size: {item.size}</span>}
               </td>
-              <td className="py-4 text-center">৳{item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+              <td className="py-4 text-center">{item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
               <td className="py-4 text-center">{item.quantity}</td>
-              <td className="py-4 text-right font-bold">৳{(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+              <td className="py-4 text-right font-bold">{(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             </tr>
           ))}
         </tbody>
@@ -84,21 +103,21 @@ const PrintableInvoice: React.FC<InvoiceProps> = ({ order }) => {
         <div className="w-64 space-y-3">
           <div className="flex justify-between text-sm">
             <span>Subtotal</span>
-            <span>৳{order.totalAmount - (order.deliveryCharge || 0) + (order.couponDiscountAmount || 0)}</span>
+            <span>{order.totalAmount - (order.deliveryCharge || 0) + (order.couponDiscountAmount || 0)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Shipping Cost</span>
-            <span>৳{order.deliveryCharge || 0}</span>
+            <span>{order.deliveryCharge || 0}</span>
           </div>
           {order.couponDiscountAmount > 0 && (
             <div className="flex justify-between text-sm text-red-600">
               <span>Discount</span>
-              <span>-৳{order.couponDiscountAmount}</span>
+              <span>-{order.couponDiscountAmount}</span>
             </div>
           )}
           <div className="flex justify-between text-xl font-black border-t-2 border-black pt-3">
             <span>TOTAL</span>
-            <span className="text-primary">৳{Math.round(order.totalAmount)}</span>
+            <span className="text-primary">{Math.round(order.totalAmount)}</span>
           </div>
         </div>
       </div>

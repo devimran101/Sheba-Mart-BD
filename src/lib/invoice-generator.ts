@@ -10,22 +10,110 @@ export async function generateInvoicePDF(order: any, settings: any) {
   const brandPhone = settings?.contact?.phone || "";
   const brandAddress = settings?.contact?.address || "";
 
-  // Set Colors
-  const primaryColor: [number, number, number] = [0, 209, 178]; // #00D1B2 (Teal)
+  // Get active primary color dynamically from DOM if available
+  let primaryColor: [number, number, number] = [0, 209, 178]; // #00D1B2 (Teal) fallback
+  if (typeof window !== 'undefined') {
+    try {
+      const tempEl = document.createElement('div');
+      tempEl.style.color = 'var(--primary)';
+      document.body.appendChild(tempEl);
+      const computedColor = getComputedStyle(tempEl).color;
+      document.body.removeChild(tempEl);
+      const match = computedColor.match(/\d+/g);
+      if (match && match.length >= 3) {
+        primaryColor = [parseInt(match[0]), parseInt(match[1]), parseInt(match[2])];
+      }
+    } catch (e) {
+      console.error("Failed to parse dynamic primary color", e);
+    }
+  }
+
   const secondaryColor: [number, number, number] = [100, 100, 100];
   const accentColor: [number, number, number] = [240, 240, 240];
 
-  // Header / Brand
-  doc.setFontSize(22);
-  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-  doc.setFont("helvetica", "bold");
-  doc.text(brandName.toUpperCase(), 14, 20);
+  // Try to load the logo image
+  let logoImg: HTMLImageElement | null = null;
+  const logoUrl = settings?.logoUrl || "/logo.webp";
+  if (typeof window !== 'undefined') {
+    try {
+      logoImg = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(e);
+        img.src = logoUrl;
+      });
+    } catch (e) {
+      console.error("Failed to load logo image for PDF", e);
+    }
+  }
+
+  // Draw Logo Image if loaded
+  let textStartX = 14;
+  if (logoImg) {
+    try {
+      doc.addImage(logoImg, 'WEBP', 14, 12, 14, 14);
+      textStartX = 32;
+    } catch (e) {
+      console.error("Failed to add image to jsPDF", e);
+    }
+  }
+
+  // Header / Brand Text
+  const normalizedBrand = brandName.replace(/\s/g, '').toLowerCase();
+  if (normalizedBrand === 'shebamartbd') {
+    // Render: S (primary), heba (black), M (primary), artb (black), d (primary)
+    let currentX = textStartX;
+    const yPos = 20;
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+
+    // S
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text("S", currentX, yPos);
+    currentX += doc.getTextWidth("S");
+
+    // heba
+    doc.setTextColor(0, 0, 0);
+    doc.text("heba", currentX, yPos);
+    currentX += doc.getTextWidth("heba");
+
+    // M
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text("M", currentX, yPos);
+    currentX += doc.getTextWidth("M");
+
+    // artb
+    doc.setTextColor(0, 0, 0);
+    doc.text("artb", currentX, yPos);
+    currentX += doc.getTextWidth("artb");
+
+    // d
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text("d", currentX, yPos);
+
+    // Tagline & decorative underline matching Navbar V2
+    doc.setFontSize(7);
+    doc.setTextColor(120, 120, 120);
+    doc.setFont("helvetica", "normal");
+    doc.text("BEST QUALITY SHOPPING", textStartX, 24);
+
+    // Underline
+    doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setLineWidth(0.4);
+    doc.line(textStartX, 26, textStartX + 42, 26);
+  } else {
+    doc.setFontSize(22);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setFont("helvetica", "bold");
+    doc.text(brandName.toUpperCase(), textStartX, 20);
+  }
 
   doc.setFontSize(8);
   doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
   doc.setFont("helvetica", "normal");
-  doc.text(brandAddress, 14, 25);
-  doc.text(`Email: ${brandEmail} | Phone: ${brandPhone}`, 14, 29);
+  doc.text(brandAddress, 14, 31);
+  doc.text(`Email: ${brandEmail} | Phone: ${brandPhone}`, 14, 35);
 
   // Invoice Title
   doc.setFontSize(30);
@@ -35,43 +123,43 @@ export async function generateInvoicePDF(order: any, settings: any) {
 
   // Horizontal Line
   doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
-  doc.line(14, 35, 196, 35);
+  doc.line(14, 39, 196, 39);
 
   // Bill To & Order Info
   doc.setFontSize(10);
   doc.setTextColor(0, 0, 0);
   doc.setFont("helvetica", "bold");
-  doc.text("BILL TO:", 14, 45);
+  doc.text("BILL TO:", 14, 49);
 
   doc.setFont("helvetica", "normal");
-  doc.text(order.shippingAddress?.fullName || "Customer", 14, 50);
-  doc.text(order.shippingAddress?.street || "", 14, 54);
-  doc.text(`${order.shippingAddress?.city || ""}, ${order.shippingAddress?.zipCode || ""}`, 14, 58);
-  doc.text(`Phone: ${order.shippingAddress?.phone || ""}`, 14, 62);
+  doc.text(order.shippingAddress?.fullName || "Customer", 14, 54);
+  doc.text(order.shippingAddress?.street || "", 14, 58);
+  doc.text(`${order.shippingAddress?.city || ""}, ${order.shippingAddress?.zipCode || ""}`, 14, 62);
+  doc.text(`Phone: ${order.shippingAddress?.phone || ""}`, 14, 66);
 
   // Order Details (Right Side)
   doc.setFont("helvetica", "bold");
-  doc.text("INVOICE #:", 140, 45);
+  doc.text("INVOICE #:", 140, 49);
   doc.setFont("helvetica", "normal");
   const invoiceId = String(order._id || order.shortId || "").slice(-8).toUpperCase().replace(/^0+/, '');
-  doc.text(invoiceId, 170, 45);
+  doc.text(invoiceId, 170, 49);
 
   doc.setFont("helvetica", "bold");
-  doc.text("DATE:", 140, 50);
+  doc.text("DATE:", 140, 54);
   doc.setFont("helvetica", "normal");
   const createdAt = order.createdAt ? new Date(order.createdAt) : null;
   const formattedDate = createdAt && isValid(createdAt) ? format(createdAt, "dd MMM yyyy") : "N/A";
-  doc.text(formattedDate, 170, 50);
+  doc.text(formattedDate, 170, 54);
 
   doc.setFont("helvetica", "bold");
-  doc.text("PAYMENT:", 140, 55);
+  doc.text("PAYMENT:", 140, 59);
   doc.setFont("helvetica", "normal");
-  doc.text(order.paymentMethod || "N/A", 170, 55);
+  doc.text(order.paymentMethod || "N/A", 170, 59);
 
   doc.setFont("helvetica", "bold");
-  doc.text("STATUS:", 140, 60);
+  doc.text("STATUS:", 140, 64);
   doc.setFont("helvetica", "normal");
-  doc.text(order.status || "Pending", 170, 60);
+  doc.text(order.status || "Pending", 170, 64);
 
   // Items Table
   const items = Array.isArray(order.items) ? order.items : [];
@@ -79,13 +167,13 @@ export async function generateInvoicePDF(order: any, settings: any) {
     index + 1,
     `${item.name}${item.color || item.size ? `\n(${[item.color, item.size].filter(Boolean).join(' / ')})` : ''}`,
     item.quantity,
-    `\u09f3 ${Math.round(item.price)}`,
-    `\u09f3 ${Math.round(item.price * item.quantity)}`,
+    `${Math.round(item.price)}`,
+    `${Math.round(item.price * item.quantity)}`,
   ]);
 
   // Use autoTable as a standalone function (correct API for Next.js bundling)
   autoTable(doc, {
-    startY: 75,
+    startY: 79,
     head: [["#", "Product", "Qty", "Unit Price", "Subtotal"]],
     body: tableRows,
     theme: "striped",
@@ -99,10 +187,10 @@ export async function generateInvoicePDF(order: any, settings: any) {
     alternateRowStyles: { fillColor: [248, 248, 248] },
     columnStyles: {
       0: { cellWidth: 10 },
-      1: { cellWidth: 85 },
+      1: { cellWidth: 90 },
       2: { halign: "center", cellWidth: 15 },
-      3: { halign: "right", cellWidth: 35 },
-      4: { halign: "right", cellWidth: 40 },
+      3: { halign: "right", cellWidth: 32 },
+      4: { halign: "right", cellWidth: 35 },
     },
   });
 
@@ -131,23 +219,23 @@ export async function generateInvoicePDF(order: any, settings: any) {
   const walletUsed = Number(order.walletAmountUsed) || 0;
 
   doc.text("Subtotal:", 140, finalY);
-  doc.text(`\u09f3 ${Math.round(subtotal)}`, 190, finalY, { align: "right" });
+  doc.text(`${Math.round(subtotal)}`, 190, finalY, { align: "right" });
 
   doc.text("Shipping Charge:", 140, finalY + 6);
-  doc.text(`\u09f3 ${Math.round(deliveryCharge)}`, 190, finalY + 6, { align: "right" });
+  doc.text(`${Math.round(deliveryCharge)}`, 190, finalY + 6, { align: "right" });
 
   // Coupon Discount (Always show even if 0)
   const couponColor = couponDiscount > 0 ? [0, 150, 80] : secondaryColor;
   doc.setTextColor(couponColor[0], couponColor[1], couponColor[2]);
   doc.text("Coupon Discount:", 140, finalY + 12);
-  doc.text(`${couponDiscount > 0 ? "- " : ""}\u09f3 ${Math.round(couponDiscount)}`, 190, finalY + 12, { align: "right" });
+  doc.text(`${couponDiscount > 0 ? "- " : ""}${Math.round(couponDiscount)}`, 190, finalY + 12, { align: "right" });
   doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
 
   // Loyalty Discount (Always show even if 0)
   const loyaltyColor = walletUsed > 0 ? [0, 150, 80] : secondaryColor;
   doc.setTextColor(loyaltyColor[0], loyaltyColor[1], loyaltyColor[2]);
   doc.text("Loyalty Discount:", 140, finalY + 18);
-  doc.text(`${walletUsed > 0 ? "- " : ""}\u09f3 ${Math.round(walletUsed)}`, 190, finalY + 18, { align: "right" });
+  doc.text(`${walletUsed > 0 ? "- " : ""}${Math.round(walletUsed)}`, 190, finalY + 18, { align: "right" });
   doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
 
   doc.setDrawColor(accentColor[0], accentColor[1], accentColor[2]);
@@ -158,7 +246,7 @@ export async function generateInvoicePDF(order: any, settings: any) {
   doc.setTextColor(0, 0, 0);
   doc.text("Total Amount:", 140, finalY + 28);
   // Final total is Gross Total minus discounts. verified that order.totalAmount is Gross (pre-discount).
-  doc.text(`\u09f3 ${Math.round(order.totalAmount - couponDiscount - walletUsed)}`, 190, finalY + 28, { align: "right" });
+  doc.text(`${Math.round(order.totalAmount - couponDiscount - walletUsed)}`, 190, finalY + 28, { align: "right" });
 
   // Footer
   const pageHeight = doc.internal.pageSize.height;

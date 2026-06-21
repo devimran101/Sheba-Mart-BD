@@ -48,7 +48,7 @@ export function FeaturesSection() {
       <div className="container mx-auto px-4 md:px-0 ">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-2xl md:text-4xl font-black tracking-tighter">
-            Why Shop With <span className="text-primary italic">Sheba Mart Bd</span>
+            Why Shop With <span className="italic"><span className="text-primary">S</span>heba<span className="text-primary">M</span>artb<span className="text-primary">d</span></span>
           </h2>
         </div>
 
