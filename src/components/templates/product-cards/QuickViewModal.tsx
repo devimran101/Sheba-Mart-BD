@@ -14,6 +14,8 @@ import { toast } from 'sonner';
 import { fbEvent } from '@/lib/fpixel';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
 
 import { useSession } from 'next-auth/react';
 
@@ -162,9 +164,11 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
           {/* Left: Sticky Image Section */}
           <div className="w-full md:w-[50%] bg-[#f8f8f8] relative md:sticky md:top-0 h-fit md:h-full flex flex-col items-center justify-center border-r border-neutral-100">
             <div className="relative w-full aspect-square flex items-center justify-center p-0">
-              <img
+              <Image
                 src={activeImage}
                 alt={product.name}
+                width={500}
+                height={500}
                 className="w-full h-full object-contain mix-blend-multiply transition-all duration-700"
               />
             </div>
@@ -179,7 +183,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                     className={`h-16 w-16 flex-shrink-0 border-2 rounded-none overflow-hidden transition-all duration-300 ${activeImage === img ? 'border-primary' : 'border-white opacity-60 hover:opacity-100'
                       }`}
                   >
-                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    <Image src={img} alt="" width={64} height={64} className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>

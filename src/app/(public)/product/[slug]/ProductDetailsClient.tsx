@@ -14,6 +14,8 @@ import {
   Settings,
   PlusCircle
 } from 'lucide-react';
+import Image from 'next/image';
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -262,9 +264,11 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
           >
             {product.images && product.images.length > 0 && selectedImage < product.images.length ? (
               <>
-                <img
+                <Image
                   src={product.images[selectedImage]}
                   alt={product.name}
+                  width={500}
+                  height={500}
                   className="h-full w-full object-contain p-4"
                 />
 
@@ -325,7 +329,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                 }`}
               onClick={() => setSelectedImage(i)}
             >
-              <img src={img} alt="" className="h-full w-full object-cover" />
+              <Image src={img} alt="" width={80} height={80} className="h-full w-full object-cover" />
             </button>
           ))}
         </div>
@@ -422,7 +426,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
                     >
                       {colorVariant?.image && (
                         <div className="h-8 w-8 rounded-full overflow-hidden border bg-background">
-                          <img src={colorVariant.image} alt="" className="h-full w-full object-cover" />
+                          <Image src={colorVariant.image} alt="" width={32} height={32} className="h-full w-full object-cover" />
                         </div>
                       )}
                       <span className="text-xs font-bold">{colorName}</span>

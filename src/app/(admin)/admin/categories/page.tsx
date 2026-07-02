@@ -45,6 +45,8 @@ import {
 } from "@/components/ui/select"
 import Swal from 'sweetalert2';
 import { slugify } from '@/lib/slugify';
+import Image from 'next/image';
+
 
 const categorySchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -332,7 +334,7 @@ export default function CategoriesPage() {
                   <TableCell>
                     <div className="h-10 w-10 overflow-hidden rounded-md border bg-muted">
                       {category.image ? (
-                        <img src={category.image} alt={category.name} className="h-full w-full object-cover" />
+                        <Image src={category.image} alt={category.name} width={40} height={40} className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
                           <Plus className="h-4 w-4 text-muted-foreground" />

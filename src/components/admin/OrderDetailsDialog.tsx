@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -344,11 +345,11 @@ export default function OrderDetailsDialog({
                                 body: JSON.stringify(payload)
                             });
                             
-                                                         const data = await res.json();
+                             const data = await res.json();
                              if (res.ok) {
-                               const hasFailures = data.results && data.results.some((r) => !r.success);
+                               const hasFailures = data.results && data.results.some((r: any) => !r.success);
                                if (hasFailures) {
-                                 const firstFail = data.results.find((r) => !r.success);
+                                 const firstFail = data.results.find((r: any) => !r.success);
                                  toast.error(`${data.message}. Reason: ${firstFail?.message || 'Unknown error'}`);
                                } else {
                                  toast.success(data.message || `${settings?.courierConfig?.activeProvider} booked successfully!`);
@@ -387,7 +388,7 @@ export default function OrderDetailsDialog({
                     <div className="flex items-center gap-3 flex-1">
                       <div className="h-12 w-12 rounded border overflow-hidden bg-muted flex-shrink-0">
                          {item.image ? (
-                             <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                             <Image src={item.image} alt={item.name} width={48} height={48} className="h-full w-full object-cover" />
                          ) : (
                              <div className="h-full w-full flex items-center justify-center text-xs text-muted-foreground">No Img</div>
                          )}

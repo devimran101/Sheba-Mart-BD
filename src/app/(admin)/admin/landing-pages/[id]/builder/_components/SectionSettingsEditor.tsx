@@ -27,6 +27,8 @@ import {
   SectionStyles 
 } from '@/lib/landing-page-sections';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+
 
 const AVAILABLE_ICONS = [
   { value: 'leaf', label: 'Leaf (প্রাকৃতিক/ন্যাচারাল)' },
@@ -186,9 +188,11 @@ export default function SectionSettingsEditor({
                     setShowDropdown(false);
                   }}
                 >
-                  <img
+                  <Image
                     src={product.images?.[0] || '/assets/product-placeholder.webp'}
                     alt={product.name}
+                    width={32}
+                    height={32}
                     className="h-8 w-8 rounded-lg object-cover bg-gray-50 border"
                   />
                   <div className="flex-1 min-w-0">

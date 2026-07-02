@@ -512,11 +512,35 @@ export async function GET(req: NextRequest) {
       query = { user: userId, deletedAt: null };
     }
 
-    const orders = await Order.find(query)
-      .sort({ createdAt: -1 })
-      .populate('user', 'name email'); // Populate user info for admin view
+    const pageStr = searchParams.get('page');
+    const limitStr = searchParams.get('limit');
 
-    return NextResponse.json(orders);
+    if (pageStr && limitStr) {
+      const page = parseInt(pageStr);
+      const limit = parseInt(limitStr);
+      const skip = (page - 1) * limit;
+
+      const totalOrders = await Order.countDocuments(query);
+      const orders = await Order.find(query)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('user', 'name email');
+
+      return NextResponse.json({
+        orders,
+        pagination: {
+          total: totalOrders,
+          totalPages: Math.ceil(totalOrders / limit)
+        }
+      });
+    } else {
+      const orders = await Order.find(query)
+        .sort({ createdAt: -1 })
+        .populate('user', 'name email');
+
+      return NextResponse.json(orders);
+    }
   } catch (error) {
     console.error('Error fetching orders:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Pagination } from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -46,6 +48,10 @@ import { generateInvoicePDF } from '@/lib/invoice-generator';
 
 
 export default function OrdersPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -95,14 +101,18 @@ export default function OrdersPage() {
     });
   };
 
-  const fetchOrders = async () => {
+  const limit = 10;
+
+  const fetchOrders = async (page = currentPage, signal?: AbortSignal) => {
     try {
-      const res = await fetch('/api/orders?all=true');
+      setLoading(true);
+      const res = await fetch(`/api/orders?all=true&page=${page}&limit=${limit}`, { signal });
       if (!res.ok) {
         throw new Error(`Failed to load orders: ${res.status} ${res.statusText}`);
       }
       const data = await res.json();
-      setOrders(data);
+      setOrders(data.orders || []);
+      setPagination(data.pagination || { total: 0, totalPages: 1 });
 
       // Also fetch settings for the invoice generator
       const settingsRes = await fetch('/api/settings');
@@ -110,6 +120,7 @@ export default function OrdersPage() {
         setSettings(await settingsRes.json());
       }
     } catch (error: any) {
+      if (error.name === 'AbortError') return;
       toast.error(error.message || 'Failed to load orders');
     } finally {
       setLoading(false);
@@ -117,7 +128,9 @@ export default function OrdersPage() {
   };
 
   useEffect(() => {
-    fetchOrders();
+    const controller = new AbortController();
+    fetchOrders(currentPage, controller.signal);
+    return () => controller.abort();
   }, []);
 
   const filteredOrders = orders.filter((order) => {
@@ -772,6 +785,22 @@ export default function OrdersPage() {
           </TableBody>
         </Table>
       </div>
+
+      {!loading && pagination.totalPages > 1 && (
+        <div className="py-4">
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              fetchOrders(page);
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', page.toString());
+              router.push(`?${params.toString()}`);
+            }}
+          />
+        </div>
+      )}
 
       <OrderDetailsDialog
         orderId={selectedOrderId}

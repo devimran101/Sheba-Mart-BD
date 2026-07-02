@@ -15,6 +15,8 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
+import Image from 'next/image';
+
 
 export default function BannersPage() {
   const [banners, setBanners] = useState<any[]>([]);
@@ -148,9 +150,10 @@ export default function BannersPage() {
                 <TableRow key={banner._id} className="group hover:bg-muted/30 transition-colors">
                   <TableCell>
                     <div className="aspect-[21/9] w-full overflow-hidden rounded-md border bg-muted relative">
-                      <img 
+                      <Image 
                         src={banner.image} 
                         alt={banner.title} 
+                        fill
                         className="absolute inset-0 h-full w-full object-cover" 
                       />
                     </div>

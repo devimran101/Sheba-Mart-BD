@@ -4,6 +4,8 @@
 import { ArrowLeft, Share2, Bookmark, MessageSquare, Clock, Calendar, MoveLeft, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
+
 import { toast } from 'sonner';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -67,7 +69,7 @@ export default function BlogDetailsV2({ blog, readingTime }: BlogDetailsV2Props)
             <div className="flex -space-x-4">
               {[1, 2, 3].map(i => (
                 <div key={i} className="h-12 w-12 rounded-full border-4 border-white dark:border-neutral-950 bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center overflow-hidden shadow-sm">
-                  <img src={`https://ui-avatars.com/api/?name=Author+${i}&background=random`} alt="Contributor" />
+                  <Image src={`https://ui-avatars.com/api/?name=Author+${i}&background=random`} alt="Contributor" width={48} height={48} />
                 </div>
               ))}
             </div>

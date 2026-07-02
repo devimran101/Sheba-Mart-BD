@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { 
   User, 
@@ -42,9 +43,11 @@ export default function AdminTopbar() {
             <DropdownMenuTrigger nativeButton={true} render={
               <Button variant="secondary" size="icon" className="rounded-full overflow-hidden border border-primary/20">
                 {session.user.image ? (
-                  <img 
+                  <Image 
                     src={session.user.image} 
                     alt={session.user.name || "Admin"} 
+                    width={40}
+                    height={40}
                     className="h-full w-full object-cover"
                     referrerPolicy="no-referrer"
                   />

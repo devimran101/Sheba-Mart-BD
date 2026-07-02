@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Pagination } from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -63,6 +65,10 @@ interface UserData {
 }
 
 export default function UsersPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
@@ -73,14 +79,18 @@ export default function UsersPage() {
 
   const { data: session } = useSession();
   const isSuperAdmin = (session?.user as any)?.role === 'super_admin';
+  const limit = 10;
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (page = currentPage, signal?: AbortSignal) => {
     try {
-      const response = await fetch('/api/admin/users');
+      setLoading(true);
+      const response = await fetch(`/api/admin/users?page=${page}&limit=${limit}`, { signal });
       if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
-      setUsers(data);
-    } catch (error) {
+      setUsers(data.users || []);
+      setPagination(data.pagination || { total: 0, totalPages: 1 });
+    } catch (error: any) {
+      if (error.name === 'AbortError') return;
       console.error('Error fetching users:', error);
       toast.error('Failed to load users');
     } finally {
@@ -89,7 +99,9 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    const controller = new AbortController();
+    fetchUsers(currentPage, controller.signal);
+    return () => controller.abort();
   }, []);
 
   const openUserDetails = (user: UserData) => {
@@ -217,7 +229,7 @@ export default function UsersPage() {
             </Button>
           )}
           <div className="bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20">
-            <span className="text-primary font-bold text-sm">{users.length} Total Users</span>
+            <span className="text-primary font-bold text-sm">{pagination.total} Total Users</span>
           </div>
         </div>
       </div>
@@ -257,9 +269,11 @@ export default function UsersPage() {
                   <TableCell>
                     {user.image && user.image !== '' ? (
                       <div className="relative h-10 w-10 rounded-full overflow-hidden border">
-                        <img 
+                        <Image 
                           src={user.image} 
                           alt={user.name} 
+                          width={40}
+                          height={40}
                           className="h-full w-full object-cover"
                           onError={(e) => {
                             (e.target as any).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`;
@@ -362,6 +376,22 @@ export default function UsersPage() {
         </Table>
       </div>
 
+      {!loading && pagination.totalPages > 1 && (
+        <div className="py-4">
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              fetchUsers(page);
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', page.toString());
+              router.push(`?${params.toString()}`);
+            }}
+          />
+        </div>
+      )}
+
       {/* User Details Modal */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
         <DialogContent className="max-w-2xl">
@@ -378,9 +408,11 @@ export default function UsersPage() {
               <div className="flex flex-col md:flex-row items-center gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100">
                 <div className="relative h-24 w-24 rounded-full overflow-hidden border-4 border-white shadow-xl flex-shrink-0 bg-primary/10 flex items-center justify-center">
                   {selectedUser.image ? (
-                    <img 
+                    <Image 
                       src={selectedUser.image} 
                       alt={selectedUser.name} 
+                      width={96}
+                      height={96}
                       className="h-full w-full object-cover"
                       onError={(e) => { (e.target as any).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedUser.name)}&background=random`; }}
                     />

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -462,7 +463,7 @@ export default function CheckoutPage() {
                 {items.map((item, index) => (
                   <div key={`${item.productId}-${item.color || 'no-color'}-${item.size || 'no-size'}-${index}`} className="flex gap-4 items-start relative group">
                     <div className="h-16 w-16 rounded-md border bg-muted flex-shrink-0 relative overflow-hidden">
-                      {item.image && <img src={item.image} alt={item.name || 'Product'} className="h-full w-full object-cover" />}
+                      {item.image && <Image src={item.image} alt={item.name || 'Product'} width={64} height={64} className="h-full w-full object-cover" />}
                     </div>
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex justify-between items-start gap-2 w-full min-w-0">
@@ -811,7 +812,7 @@ export default function CheckoutPage() {
                               {method === 'banglaQr' ? (
                                 <Globe className="h-8 w-8 text-primary" />
                               ) : (
-                                <img src={`/assets/${method}logo.webp`} alt={method} className="h-full w-auto object-contain" />
+                                <Image src={`/assets/${method}logo.webp`} alt={method} width={40} height={40} className="h-full w-auto object-contain" />
                               )}
                             </div>
                             <p className="text-[10px] font-bold uppercase">{method === 'banglaQr' ? 'Bangla QR' : method}</p>
@@ -888,7 +889,7 @@ export default function CheckoutPage() {
                 {selectedMethod?.id === 'banglaQr' ? (
                   <Globe className="h-6 w-6 text-primary" />
                 ) : (
-                  <img src={`/assets/${selectedMethod?.id}logo.webp`} alt={selectedMethod?.id} className="h-full w-auto object-contain" />
+                  <Image src={`/assets/${selectedMethod?.id}logo.webp`} alt={selectedMethod?.id || "logo"} width={40} height={40} className="h-full w-auto object-contain" />
                 )}
               </div>
               <div className="text-left">
@@ -932,7 +933,7 @@ export default function CheckoutPage() {
                 <div className="flex flex-col items-center gap-1.5 pt-2 border-t border-primary/10">
                   <p className="text-[9px] font-bold uppercase opacity-40">Scan QR Code to Pay</p>
                   <div className="p-1.5 bg-white rounded-lg shadow-sm border border-primary/10">
-                    <img src={selectedMethod?.qrCode || '/assets/placeholder-qr.png'} alt="QR" className="h-32 w-32 object-contain" />
+                    <Image src={selectedMethod?.qrCode || '/assets/placeholder-qr.png'} alt="QR" width={128} height={128} className="h-32 w-32 object-contain" />
                   </div>
                 </div>
               )}

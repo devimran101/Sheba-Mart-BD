@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { Logo } from '@/components/ui/logo';
 import { useSettings } from '@/components/SettingsProvider';
+import Image from 'next/image';
+
 import { toast } from 'sonner';
 import {
   DropdownMenu,
@@ -78,9 +80,11 @@ export function MobileNavbar({ navItems, categories }: MobileNavbarProps) {
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center cursor-pointer outline-none" aria-label="Account menu">
                   <div className="h-8 w-8 rounded-full border-2 border-primary/20 overflow-hidden hover:border-primary transition-all">
-                    <img
+                    <Image
                       src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'U')}`}
                       alt={session.user?.name || 'User'}
+                      width={32}
+                      height={32}
                       className="h-full w-full object-cover"
                     />
                   </div>

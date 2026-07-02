@@ -4,6 +4,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
 import { ShoppingBag, Search, User, Heart, Menu, X, LogOut, LayoutDashboard, Settings, Truck, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/store/hooks';
@@ -139,9 +141,11 @@ export default function NavbarV3() {
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-2 px-1 py-1 rounded-full border border-neutral-200 hover:bg-transparent transition-all cursor-pointer outline-none group hover:scale-110">
                       <div className="h-8 w-8 rounded-full overflow-hidden group-hover:scale-110 transition-transform">
-                        <img
+                        <Image
                           src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || "User")}&background=random`}
                           alt={session.user?.name || "User Profile"}
+                          width={32}
+                          height={32}
                           className="h-full w-full object-cover"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent("User")}&background=f3f4f6&color=6b7280`;

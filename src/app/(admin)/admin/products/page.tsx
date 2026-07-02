@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -394,9 +395,11 @@ function ProductsContent() {
                   <TableCell>
                     <div className="h-12 w-12 overflow-hidden rounded-md border bg-muted">
                       {product.images && product.images.length > 0 ? (
-                        <img 
+                        <Image 
                           src={product.images[0]} 
                           alt={product.name} 
+                          width={48}
+                          height={48}
                           className="h-full w-full object-cover" 
                         />
                       ) : (

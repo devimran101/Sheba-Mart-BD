@@ -15,6 +15,13 @@ export async function GET(req: NextRequest) {
 
     await connectToDatabase();
 
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const skip = (page - 1) * limit;
+
+    const totalUsers = await User.countDocuments({ role: { $ne: 'super_admin' } });
+
     // Aggregate users with their order stats
     const users = await User.aggregate([
       { 
@@ -45,10 +52,18 @@ export async function GET(req: NextRequest) {
           lastOrderDate: { $max: '$userOrders.createdAt' }
         }
       },
-      { $sort: { createdAt: -1 } }
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit }
     ]);
 
-    return NextResponse.json(users);
+    return NextResponse.json({
+      users,
+      pagination: {
+        total: totalUsers,
+        totalPages: Math.ceil(totalUsers / limit)
+      }
+    });
   } catch (error) {
     console.error('Fetch Users Error:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
